@@ -24,6 +24,9 @@ def posso_caricare_multiplo_5(a, b, c, credito) -> bool:
     speso = a * snack + b * ridotto + c * intero
     caricare = round(speso - credito, 2)
 
+    if caricare < 0:
+        return False
+
     return caricare % 5 == 0
 
 
@@ -127,9 +130,13 @@ async def show_solutions(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Per favore scegli solo tra: intero, ridotto o snack.")
         return ASK_PREFERENCE
 
-    offset = int(credito // prezzi[preferito])
-    credito_residuo = round(credito - offset * prezzi[preferito], 2)
-    print(offset, credito_residuo)
+    if credito > 50:
+        offset = int(credito // prezzi[preferito])
+        credito_residuo = round(credito - offset * prezzi[preferito], 2)
+        print(offset, credito_residuo)
+    else:
+        credito_residuo = credito
+        offset = 0
 
     solutions = find_solutions(credito_residuo, preferito, offset)
 
