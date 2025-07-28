@@ -32,8 +32,13 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 async def handle_number(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     ## Validazione input
-    credito_str = update.message.text.replace(",", ".").strip()
-    credito = float(credito_str)
+    try: 
+        credito_str = update.message.text.strip()
+        credito = float(credito_str)
+    except:
+        await update.message.reply_text("Il credito deve essere un numero")
+        return WAITING_FOR_CREDITO
+
 
     if credito != round(credito, 1):
         await update.message.reply_text("Non è possibile, solo la prima cifra decimale può essere diversa da 0")
